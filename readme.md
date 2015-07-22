@@ -30,4 +30,4 @@ If you'd like to check yourself, you can run `./script/cibuild` locally, or past
 
 ## Credit
 
-Inspired by (forked from) [JasonSanford/denver-bike-routes] (https://github.com/jasonsanford/denver-bike-routes) [benbalter/dc-wifi-social](https://github.com/benbalter/dc-wifi-social)
+Inspired by (forked from) [JasonSanford/denver-bike-routes] (https://github.com/jasonsanford/denver-bike-routes) |  [benbalter/dc-wifi-social](https://github.com/benbalter/dc-wifi-social)
