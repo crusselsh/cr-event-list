@@ -1,4 +1,4 @@
-# Denver Bike Routes
+# CR event list
 
 <img src="https://travis-ci.org/JasonSanford/denver-bike-routes.png">
 
