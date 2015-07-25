@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "categoría": "feria",
+        "horario": "Sábado 9am-2pm; Miércoles 1pm-5pm"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.12129521369934,
+          9.99333308499759
+        ]
+      }
+    }
+  ]
+}
