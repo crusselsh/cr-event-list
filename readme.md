@@ -2,7 +2,7 @@
 
 <img src="https://travis-ci.org/JasonSanford/denver-bike-routes.png">
 
-### A collaborative list of Denver bike routes
+### A collaborative list of events
 
 ![routes](https://raw.github.com/JasonSanford/denver-bike-routes/master/img/routes-example.png)
 
