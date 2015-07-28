@@ -1,9 +1,9 @@
 (function () {
-    var mapquest_url = 'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png',
+    var mapquest_url = 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
         mapquest1 = new L.TileLayer(mapquest_url, {maxZoom: 18, subdomains: '1234'}),
         mapquest2 = new L.TileLayer(mapquest_url, {maxZoom: 18, subdomains: '1234'}),
-        map1 = new L.Map('map1', {layers: [mapquest1], center: new L.LatLng(39.776880380637024, -104.98947143554686), zoom: 9}),
-        map2 = new L.Map('map2', {layers: [mapquest2], center: new L.LatLng(39.776880380637024, -104.98947143554686), zoom: 10}),
+        map1 = new L.Map('map1', {layers: [mapquest1], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
+        map2 = new L.Map('map2', {layers: [mapquest2], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
         originalGeoJSON = null,
         startIcon = new L.Icon({
             iconUrl: 'img/markers/start.png',
@@ -45,8 +45,8 @@
     var drawControl = new L.Control.Draw({
         draw: {
             position: 'topleft',
-            polyline: {
-                title: 'Draw a route',
+            marker: {
+                title: 'Poner un evento',
                 shapeOptions: {
                     color: '#46461f',
                     opacity: 0.8,
@@ -56,7 +56,7 @@
             polygon: false,
             circle: false,
             rectangle: false,
-            marker: false
+            polyline: false
         },
         edit: {
             featureGroup: drawnItems
