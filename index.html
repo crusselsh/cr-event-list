@@ -1,108 +1,78 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>CR lista de eventos</title>
+    <head>
+        <title>CR lista de eventos</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.css">
-    <link rel="stylesheet" href="lib/leaflet-draw/leaflet.draw.css">
-    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="lib/nouislider/nouislider.fox.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.css">
+        <link rel="stylesheet" href="lib/leaflet-draw/leaflet.draw.css">
+        <link href="/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/lib/nouislider/nouislider.fox.css" rel="stylesheet">
 
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="lib/leaflet/leaflet.ie.css" />
-        <link rel="stylesheet" href="leaflet.draw.ie.css" />
-    <![endif]-->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.js"></script>
-    <script src="lib/leaflet-draw/leaflet.draw.js"></script>
-    <script src="lib/nouislider/jquery.nouislider.min.js"></script>
-    <style type="text/css">
-        .standard-height {
-            height: 500px;
-        }
-        .full-height {
-            height: 100%;
-        }
-        .full-width {
-            width: 100%;
-        }
-        .filter {
-            margin-bottom: 30px;
-        }
-        .filter label {
-            display: inline;
-        }
-        .filter .check {
-            vertical-align: top;
-        }
-        .slider {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-        .slider-val.right {
-            float: right;
-        }
-    </style>
-</head>
-<body>
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="lib/leaflet/leaflet.ie.css" />
+<link rel="stylesheet" href="leaflet.draw.ie.css" />
+        <script src="/lib/nouislider/jquery.nouislider.min.js"></script>
+<![endif]-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.js"></script>
+        <script src="/lib/leaflet-draw/leaflet.draw.js"></script>
+        <style type="text/css">
+            <!-- map css -->
+             body {
+        padding: 0;
+        margin: 0;
+    }
+    html, body, #map1 {
+        height: 100%;
+        font-family: 'Calibri', cursive;
+    }
+    .leaflet-container .leaflet-control-zoom {
+        margin-left: 13px;
+        margin-top: 70px;
+    }
 
-    <div class="container">
-        <h1>Crear y explorar eventos de Costa Rica</h1>
+    #map { z-index: 1;}
+    #title { z-index: 2; position: absolute; left: 10px; }
+            <!--form css-->
 
-        <h2>Explorar</h2>
-        <p>Use los filtros a la derecha para seleccionar eventos abajo.</p>
-        <div class="row standard-height">
-            <div class="span8 full-height">
-                <div id="map1" class="full-height"></div>
-            </div>
-            <div class="span4 full-height">
-                <div id="filters" class="full-height">
-                    <div class="filter">
-                        <div style="margin-bottom: 10px;">
-                            <input type="checkbox" id="distance-check" class="check" data-toggling="distance"> <label for="distance-check">Filter by distance:</label>
-                        </div>
-                        <div class="slider distance noUiSlider" id="distance-slider"></div>
-                        <input type="text" class="distance input-small slider-val" id="distance-from" disabled>
-                        <input type="text" class="distance input-small slider-val right" id="distance-to" disabled>
-                    </div>
-                    <div class="filter">
-                        <div style="margin-bottom: 10px;">
-                            <input type="checkbox" id="difficulty-check" class="check" data-toggling="difficulty"> <label for="difficulty-check">Filter by difficulty:</label>
-                        </div>
-                        <div class="slider difficulty noUiSlider" id="difficulty-slider"></div>
-                        <input type="text" class="difficulty input-small slider-val" id="difficulty-from" disabled>
-                        <input type="text" class="difficulty input-small slider-val right" id="difficulty-to" disabled>
-                    </div>
-                    <div>
-                        <div style="margin-bottom: 15px;">
-                            <img src="img/markers/start.png" alt="Start Marker" /> - Start
-                        </div>
-                        <div>
-                            <img src="img/markers/end.png" alt="End Marker" /> - End
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </style>
+    </head>
+    <body>
+        <h3 id="title">Eventos compartidos</h3>
+        <div id="map1"></div>
+
+        <!--Create Event Form -->
+        <div id="creatediv">
+            <form class="form" action="#" id="create">
+                <h4>Crear un evento nuevo</h4>
+                <hr/><br/>
+                <label>Evento : </label>
+                <br/>
+                <input type="text" id="event-name" placeholder="El Chuzo de..."/><br/>
+                <br/>
+                <label>Fecha y hora : </label>
+                <br/>
+                <input type="text" id="event-time" placeholder="25 Sep 2015 - 5:00-10:00pm"/><br/>
+                <br/>
+                <label>Descripción : </label>
+                <br/>
+                <input type="text" id="event-desc" placeholder="¡Vengan a festijar con...!"/><br/>
+                <br/>
+                <label>Sitio de web : </label>
+                <br/>
+                <input type="text" id="event-link" placeholder="http://wwww.facebook.com/..."/><br/>
+                <br/>
+                <input type="button" id="submit-event" value="Crear evento"/>
+                <input type="button" id="cancel" value="Cancel"/>
+                <br/>
+
+            </form>
+
         </div>
-
-        <h2 id="create">Crear</h2>
-        <p>Use los herramientos a la izquierda del mapa para poner un evento. Cuando termine, los datos en geojson aperecerá a la derecha.</p>
-        <div class="row standard-height">
-            <div class="span8 full-height">
-                <div id="map2" class="full-height"></div>
-            </div>
-            <div class="span4 full-height">
-                <div id="output" class="full-height">
-                    <textarea id="geojson-output" class="full-width full-height"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/app.js"></script>
+        <script src="js/app.js"></script>
 </body>
 </html>

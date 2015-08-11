@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CR lista de eventos</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.css">
+        <link rel="stylesheet" href="lib/leaflet-draw/leaflet.draw.css">
+        <link href="/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/lib/nouislider/nouislider.fox.css" rel="stylesheet">
+
+        <!--[if lte IE 8]>
+<link rel="stylesheet" href="lib/leaflet/leaflet.ie.css" />
+<link rel="stylesheet" href="leaflet.draw.ie.css" />
+        <script src="/lib/nouislider/jquery.nouislider.min.js"></script>
+<![endif]-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.js"></script>
+        <script src="/lib/leaflet-draw/leaflet.draw.js"></script>
+        <style type="text/css">
+            .standard-height {
+                height: 500px;
+            }
+            .full-height {
+                height: 100%;
+            }
+            .full-width {
+                width: 100%;
+            }
+            .filter {
+                margin-bottom: 30px;
+            }
+            .filter label {
+                display: inline;
+            }
+            .filter .check {
+                vertical-align: top;
+            }
+            .slider {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+            .slider-val.right {
+                float: right;
+            }
+
+            .table-editable {
+                position: relative;
+            }
+            .table-editable .glyphicon {
+                font-size: 20px;
+            }
+
+            .table-remove {
+                color: #700;
+                cursor: pointer;
+            }
+            .table-remove:hover {
+                color: #f00;
+            }
+
+            .table-up, .table-down {
+                color: #007;
+                cursor: pointer;
+            }
+            .table-up:hover, .table-down:hover {
+                color: #00f;
+            }
+
+            .table-add {
+                color: #070;
+                cursor: pointer;
+                position: absolute;
+                top: 8px;
+                right: 0;
+            }
+            .table-add:hover {
+                color: #0b0;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h3>Sus eventos de Costa Rica</h3>
+            <div class="row standard-height">
+                <div class="span8 full-height">
+                    <div id="map1" class="full-height"></div>
+                </div>
+
+                <div class="span4 full-height">
+                    <div id="table" class="table-editable">
+                        <span class="table-add glyphicon glyphicon-plus"></span>
+                        <table class="table">
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Horiario</th>
+                                <th>Subcategoria</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true">undefined</td>
+                                <td contenteditable="true">undefined</td>
+                                <td contenteditable="true">undefined</td>
+                                <td>
+                                    <span class="table-remove glyphicon glyphicon-remove"></span>
+                                </td>
+                                <td>
+                                    <span class="table-up glyphicon glyphicon-arrow-up"></span>
+                                    <span class="table-down glyphicon glyphicon-arrow-down"></span>
+                                </td>
+                            </tr>
+                            <!-- This is our clonable table line -->
+                            <tr class="hide">
+                                <td contenteditable="true">undefined</td>
+                                <td contenteditable="true">undefined</td>
+                                <td contenteditable="true">undefined</td>
+                                <td>
+                                    <span class="table-remove glyphicon glyphicon-remove"></span>
+                                </td>
+                                <td>
+                                    <span class="table-up glyphicon glyphicon-arrow-up"></span>
+                                    <span class="table-down glyphicon glyphicon-arrow-down"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div> <!--/table-editable -->
+
+                    <button id="export-btn" class="btn btn-primary">Export Data</button>
+                    <p id="export"></p>
+                </div> <!--/span4 full-height-->
+
+<!--
+                <div class="span4 full-height">
+                    <div id="output" class="full-height">
+                        <textarea id="geojson-output" class="full-width full-height"></textarea>
+                    </div>
+                </div>
+
+<div class="span4 full-height">
+<div id="filters" class="full-height">
+<div class="filter">
+<div style="margin-bottom: 10px;">
+<input type="checkbox" id="distance-check" class="check" data-toggling="distance"> <label for="distance-check">Filter by distance:</label>
+</div>
+<div class="slider distance noUiSlider" id="distance-slider"></div>
+<input type="text" class="distance input-small slider-val" id="distance-from" disabled>
+<input type="text" class="distance input-small slider-val right" id="distance-to" disabled>
+</div>
+<div class="filter">
+<div style="margin-bottom: 10px;">
+<input type="checkbox" id="difficulty-check" class="check" data-toggling="difficulty"> <label for="difficulty-check">Filter by difficulty:</label>
+</div>
+<div class="slider difficulty noUiSlider" id="difficulty-slider"></div>
+<input type="text" class="difficulty input-small slider-val" id="difficulty-from" disabled>
+<input type="text" class="difficulty input-small slider-val right" id="difficulty-to" disabled>
+</div>
+<!-- <div>
+<div style="margin-bottom: 15px;">
+<img src="img/markers/start.png" alt="Start Marker" /> - Start
+</div>
+<div>
+<!--  <img src="img/markers/end.png" alt="End Marker" /> - End
+</div>
+</div>
+</div>
+-->
+            </div> <!--/row standard-height-->
+        </div> <!--/container-->
+        <!--
+<h2 id="create">Crear</h2>
+<p>Use los herramientos a la izquierda del mapa para poner un evento. Cuando termine, los datos en geojson aperecerá a la derecha.</p>
+<div class="row standard-height">
+<div class="span8 full-height">
+<div id="map2" class="full-height"></div>
+</div>
+<div class="span4 full-height">
+<div id="output" class="full-height">
+<textarea id="geojson-output" class="full-width full-height"></textarea>
+</div>
+</div>
+</div>
+    </div>
+-->
+
+    <script src="js/app.js"></script>
+</body>
+</html>
