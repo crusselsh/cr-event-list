@@ -40,7 +40,7 @@
     var drawnItems = new L.FeatureGroup();
     map1.addLayer(drawnItems);
 
-    $.getJSON('eventos.geojson', function (data){
+    $.getJSON('data/eventos.geojson', function (data){
         originalGeoJSON = data;
       displayedEvents.addData(data);
         //timeToFilter();
