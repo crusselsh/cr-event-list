@@ -76,6 +76,8 @@
 
     map1.on('draw:created', function (e) {
 
+      // pop up form to fill in details
+
       drawnItems.addLayer(e.layer, {
             style: {
                 color: '#003300',

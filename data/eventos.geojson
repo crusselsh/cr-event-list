@@ -4,7 +4,8 @@
     {
       "type": "Feature",
       "properties": {
-        "categoría": "feria",
+        "Evento": "Feria Herediano - ",
+        "Fecha y hora": "feria",
         "horario": "Sábado 9am-2pm; Miércoles 1pm-5pm",
         "subcategoría": "comida"
       },
