@@ -5,9 +5,9 @@
       "type": "Feature",
       "properties": {
         "Evento": "Feria Herediano - ",
-        "Fecha y hora": "feria",
-        "horario": "Sábado 9am-2pm; Miércoles 1pm-5pm",
-        "subcategoría": "comida"
+        "Fecha(s) o dia(s)": "Sábado, Miércoles",
+        "horario": "(S) 9am-2pm, (M) 1pm-5pm",
+        "Sitio": "https://www.facebook.com/events/1412578552325544/"
       },
       "geometry": {
         "type": "Point",

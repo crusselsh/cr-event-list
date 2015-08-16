@@ -1,11 +1,11 @@
 (function () {
-    var mapquest_url = 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
-        mapquest1 = new L.TileLayer(mapquest_url, {maxZoom: 16, subdomains: '1234'}),
-      //  mapquest2 = new L.TileLayer(mapquest_url, {maxZoom: 16, subdomains: '1234'}),
-        map1 = new L.Map('map1', {layers: [mapquest1], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
-       // map2 = new L.Map('map2', {layers: [mapquest2], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
-        originalGeoJSON = null,
-        /*
+  var map_url = 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+      map_layer = new L.TileLayer(map_url, {maxZoom: 16, subdomains: '1234'}),
+      //  start location hardcoded as San Jose, Costa Rica
+      map1 = new L.Map('map1', {layers: [map_layer], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
+      // map2 = new L.Map('map2', {layers: [mapquest2], center: new L.LatLng(9.935472, -84.087836), zoom: 12}),
+      originalGeoJSON = null,
+      /*
         startIcon = new L.Icon({
             iconUrl: 'img/markers/start.png',
             iconAnchor: [0, 28]
@@ -15,89 +15,99 @@
             iconAnchor: [28, 28]
         }),
         */
-        displayedEvents = new L.GeoJSON(null, {
-            style: {
-                color: '#003300',
-                opacity: 0.6,
-                width: 2
-            },
-            onEachFeature: function (feature, layer) {
-                var popupContent = '<table class="table table-striped"><tbody>';
-                for (property in feature.properties) {
-                  // make editable, using [ '</strong></td><td contenteditable="true">' ] enables change but does not save >> save button?
-                    popupContent += '<tr><td><strong>'+ property + '</strong></td><td>'+ feature.properties[property] + '</td></tr>';
-                }
-                popupContent += '</tbody></table>';
-                layer.bindPopup(popupContent);
-            }
-        });
 
-    map1.addLayer(displayedEvents);
-
-//    var startEndMarkers = new L.LayerGroup();
-//    map1.addLayer(startEndMarkers);
-
-    var drawnItems = new L.FeatureGroup();
-    map1.addLayer(drawnItems);
-
-    $.getJSON('data/eventos.geojson', function (data){
-        originalGeoJSON = data;
-      displayedEvents.addData(data);
-        //timeToFilter();
-    });
-
-    var drawControl = new L.Control.Draw({
-        draw: {
-            position: 'topleft',
-            marker: {
-                title: 'Nuevo evento',
-                shapeOptions: {
-                    color: '#46461f',
-                    opacity: 0.8,
-                    weight: 7
-                }
-            },
-            polygon: false,
-            circle: false,
-            rectangle: false,
-            polyline: false
+      displayedEvents = new L.GeoJSON(null, {
+        /* to get style properties from inputs
+        style: function (feature) {
+            return {color: feature.properties.color};
+          },*/
+        style: {
+          color: '#003300',
+          opacity: 0.6
         },
-        edit: {
-            featureGroup: drawnItems
-        }
-    });
-    map1.addControl(drawControl);
-
-    map1.on('draw:drawstart', function (e) {
-
-        drawnItems.clearLayers();
-        document.getElementById('geojson-output').value = '';
-    });
-
-    map1.on('draw:created', function (e) {
-
-      // pop up form to fill in details
-
-      drawnItems.addLayer(e.layer, {
-            style: {
-                color: '#003300',
-                opacity: 0.6,
-                width: 2
-            },
-            onEachFeature: function (feature, layer) {
-                var popupContent = '<table class="table table-striped"><tbody>';
-                for (property in feature.properties) {
-                    popupContent += '<tr><td><strong>' + property + '</strong></td><td>' + feature.properties[property] + '</td></tr>';
-                }
-                popupContent += '</tbody></table>';
-                layer.bindPopup(popupContent);
+        onEachFeature: function (feature, layer) {
+          var popup = $('<div />');
+          // popup function
+          popup.on('click', '.siteLink', function(){
+            alert("test");
+          });
+          var popupContent = '<table class="table table-striped"><tbody>';
+          for (property in feature.properties) {
+            // make editable, using [ '</strong></td><td contenteditable="true">' ] enables change but does not save >> save button?
+            if (feature.properties[property] && property != "Sitio"){ // only add properties with a value
+              popupContent += '<tr><td><strong>'+ property + '</strong></td><td>'+ feature.properties[property] + '</td></tr>';
             }
-
+          }
+          popupContent += "</tbody></table></br><a href='#' class='siteLink'>Sitio</a>."
+          popup.html(popupContent)
+          layer.bindPopup(popup[0]);
+        }
       });
 
-      // update this to be a table of properties
-        document.getElementById('geojson-output').value = JSON.stringify(drawnItems.toGeoJSON().features[0].geometry);
-      /*
+  map1.addLayer(displayedEvents);
+
+
+  var drawnItems = new L.FeatureGroup();
+  map1.addLayer(drawnItems);
+
+  $.getJSON('data/eventos.geojson', function (data){
+    originalGeoJSON = data; // variable to hold original data
+    displayedEvents.addData(data); // add original data to the map
+    //timeToFilter();
+  });
+
+  var drawControl = new L.Control.Draw({
+    draw: {
+      position: 'topleft',
+      marker: {
+        title: 'Nuevo evento',
+        shapeOptions: {
+          color: '#46461f',
+          opacity: 0.8,
+          weight: 7
+        }
+      },
+      polygon: false,
+      circle: false,
+      rectangle: false,
+      polyline: false
+    },
+    edit: {
+      featureGroup: drawnItems
+    }
+  });
+  map1.addControl(drawControl);
+
+  map1.on('draw:drawstart', function (e) {
+
+    drawnItems.clearLayers();
+    document.getElementById('geojson-output').value = '';
+  });
+
+  map1.on('draw:created', function (e) {
+
+    // pop up form to fill in details
+
+    drawnItems.addLayer(e.layer, {
+      style: {
+        color: '#003300',
+        opacity: 0.6,
+        width: 2
+      },
+      onEachFeature: function (feature, layer) {
+        var popupContent = '<table class="table table-striped"><tbody>';
+        for (property in feature.properties) {
+          popupContent += '<tr><td><strong>' + property + '</strong></td><td>' + feature.properties[property] + '</td></tr>';
+        }
+        popupContent += '</tbody></table>';
+        layer.bindPopup(popupContent);
+      }
+
+    });
+
+    // update this to be a table of properties
+    document.getElementById('geojson-output').value = JSON.stringify(drawnItems.toGeoJSON().features[0].geometry);
+    /*
       var popupContent = '<table class="table table-striped"><tbody>';
       for (property in feature.properties) {
         popupContent += '<tr><td><strong>' + property + '</strong></td><td>' + feature.properties[property] + '</td></tr>';
@@ -105,7 +115,7 @@
       popupContent += '</tbody></table>';
       layer.bindPopup(popupContent);
       */
-    });
+  });
 
 
   $("#submit-event").click(function() {
@@ -119,7 +129,7 @@
       $("#creatediv").css("display", "none");
     }
   });
-/* EDITABLE TABLE ON PAGE EXAMPLE --> but data just saved on webpage...
+  /* EDITABLE TABLE ON PAGE EXAMPLE --> but data just saved on webpage...
   var $TABLE = $('#table');
   var $BTN = $('#export-btn');
   var $EXPORT = $('#export');
@@ -213,43 +223,43 @@
 
     $('.slider-val').on('change', timeToFilter);
 */
-    function timeToFilter() {
-        displayedRoutes.clearLayers();
-        startEndMarkers.clearLayers();
-        var filtered = $.extend(true, {}, originalGeoJSON);
+  function timeToFilter() {
+    displayedRoutes.clearLayers();
+    startEndMarkers.clearLayers();
+    var filtered = $.extend(true, {}, originalGeoJSON);
 
-        if ($('#distance-check').is(':checked')) {
-            var low = parseFloat($('#distance-from').val()),
-                high = parseFloat($('#distance-to').val());
-            newFiltered = {type: 'FeatureCollection', features: []};
-            for (feature in filtered.features) {
-                if (!('distance' in filtered.features[feature].properties) || (filtered.features[feature].properties.distance >= low && filtered.features[feature].properties.distance <= high)) {
-                    newFiltered.features.push(filtered.features[feature]);
-                }
-            }
-            filtered = newFiltered;
+    if ($('#distance-check').is(':checked')) {
+      var low = parseFloat($('#distance-from').val()),
+          high = parseFloat($('#distance-to').val());
+      newFiltered = {type: 'FeatureCollection', features: []};
+      for (feature in filtered.features) {
+        if (!('distance' in filtered.features[feature].properties) || (filtered.features[feature].properties.distance >= low && filtered.features[feature].properties.distance <= high)) {
+          newFiltered.features.push(filtered.features[feature]);
         }
-
-        if ($('#difficulty-check').is(':checked')) {
-            var low = parseFloat($('#difficulty-from').val()),
-                high = parseFloat($('#difficulty-to').val());
-            newFiltered = {type: 'FeatureCollection', features: []};
-            for (feature in filtered.features) {
-                if (!('difficulty' in filtered.features[feature].properties) || (filtered.features[feature].properties.difficulty >= low && filtered.features[feature].properties.difficulty <= high)) {
-                    newFiltered.features.push(filtered.features[feature]);
-                }
-            }
-            filtered = newFiltered;
-        }
-        for (feature in filtered.features) {
-            var geometry = filtered.features[feature].geometry,
-                first = geometry.coordinates[0],
-                last = geometry.coordinates[geometry.coordinates.length - 1],
-                startMarker = new L.Marker([first[1], first[0]], {icon: startIcon}),
-                endMarker = new L.Marker([last[1], last[0]], {icon: endIcon});
-            startEndMarkers.addLayer(startMarker).addLayer(endMarker);
-        }
-
-        displayedRoutes.addData(filtered);
+      }
+      filtered = newFiltered;
     }
+
+    if ($('#difficulty-check').is(':checked')) {
+      var low = parseFloat($('#difficulty-from').val()),
+          high = parseFloat($('#difficulty-to').val());
+      newFiltered = {type: 'FeatureCollection', features: []};
+      for (feature in filtered.features) {
+        if (!('difficulty' in filtered.features[feature].properties) || (filtered.features[feature].properties.difficulty >= low && filtered.features[feature].properties.difficulty <= high)) {
+          newFiltered.features.push(filtered.features[feature]);
+        }
+      }
+      filtered = newFiltered;
+    }
+    for (feature in filtered.features) {
+      var geometry = filtered.features[feature].geometry,
+          first = geometry.coordinates[0],
+          last = geometry.coordinates[geometry.coordinates.length - 1],
+          startMarker = new L.Marker([first[1], first[0]], {icon: startIcon}),
+          endMarker = new L.Marker([last[1], last[0]], {icon: endIcon});
+      startEndMarkers.addLayer(startMarker).addLayer(endMarker);
+    }
+
+    displayedRoutes.addData(filtered);
+  }
 }());
