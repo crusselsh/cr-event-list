@@ -27,19 +27,23 @@
         },
         onEachFeature: function (feature, layer) {
           var popup = $('<div />');
-          // popup function
-          popup.on('click', '.siteLink', function(){
+          // popup function, use for edit button
+          popup.on('click', '.editEvent', function(){
             alert("test");
           });
           var popupContent = '<table class="table table-striped"><tbody>';
           for (property in feature.properties) {
             // make editable, using [ '</strong></td><td contenteditable="true">' ] enables change but does not save >> save button?
-            if (feature.properties[property] && property != "Sitio"){ // only add properties with a value
-              popupContent += '<tr><td><strong>'+ property + '</strong></td><td>'+ feature.properties[property] + '</td></tr>';
+            if (feature.properties[property]) { // only add properties with a value
+                if (property == "Sitio") {
+                  popupContent += "<tr><td><strong>Sitio</strong></td><td><a href='"+feature.properties[property]+"' class='siteLink'>link</a>."
+                } else {
+                  popupContent += '<tr><td><strong>'+ property + '</strong></td><td>'+ feature.properties[property] + '</td></tr>';
+                }
             }
           }
-          popupContent += "</tbody></table></br><a href='#' class='siteLink'>Sitio</a>."
-          popup.html(popupContent)
+          popupContent += "</tbody></table>"; // add button for editEvent here after done with table
+          popup.html(popupContent);
           layer.bindPopup(popup[0]);
         }
       });

@@ -22,7 +22,8 @@
       "properties": {
         "categoría": "feria",
         "horario": "Sábado 9am-12pm",
-        "subcategoría": "comida orgánica"
+        "subcategoría": "comida orgánica",
+        "Sitio": "http://gis.stackexchange.com/questions/111410/display-a-link-in-a-popup-with-leaflet"
       },
       "geometry": {
         "type": "Point",
